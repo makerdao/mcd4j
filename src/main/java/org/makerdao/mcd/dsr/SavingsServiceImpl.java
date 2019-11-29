@@ -13,7 +13,9 @@ package org.makerdao.mcd.dsr;
 
 import org.makerdao.mcd.contracts.DssProxyActionsDsr;
 import org.makerdao.mcd.contracts.Pot;
+import org.makerdao.mcd.contracts.ProxyRegistry;
 import org.makerdao.mcd.contracts.Vat;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -25,29 +27,35 @@ public class SavingsServiceImpl implements SavingsService {
     Pot pot;
     Vat vat;
     DssProxyActionsDsr dssProxyActionsDsr;
+    ProxyRegistry proxyRegistry;
+    String daiAdapterAddress;
 
-    public SavingsServiceImpl(Pot pot, DssProxyActionsDsr dssProxyActionsDsr, Vat vat) {
+    public SavingsServiceImpl(Pot pot, DssProxyActionsDsr dssProxyActionsDsr, Vat vat, ProxyRegistry proxyRegistry,
+                              String daiAdapterAddress) {
         this.pot = pot;
         this.vat = vat;
         this.dssProxyActionsDsr = dssProxyActionsDsr;
+        this.proxyRegistry = proxyRegistry;
+        this.daiAdapterAddress = daiAdapterAddress;
     }
 
     @Override
-    public void join(BigDecimal amountInDai) {
+    public TransactionReceipt join(BigDecimal amountInDai) throws Exception {
+        return this.dssProxyActionsDsr.join(this.daiAdapterAddress, pot.getContractAddress(),
+                amountInDai.toBigInteger().multiply(WAD.toBigInteger())).send();
     }
 
     @Override
-    public void exit(BigDecimal amountInDai) {
+    public TransactionReceipt exit(BigDecimal amountInDai) throws Exception {
+        return this.dssProxyActionsDsr.exit(this.daiAdapterAddress, pot.getContractAddress(),
+                amountInDai.toBigInteger().multiply(WAD.toBigInteger())).send();
     }
 
     @Override
-    public void exitAll() {
+    public TransactionReceipt exitAll() throws Exception {
+        return this.dssProxyActionsDsr.exitAll(this.daiAdapterAddress, pot.getContractAddress()).send();
     }
 
-    @Override
-    public BigDecimal getBalance() {
-        return null;
-    }
 
     @Override
     public BigDecimal getBalanceOf(String guy) throws Exception {

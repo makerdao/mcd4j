@@ -46,6 +46,18 @@ class McdConfig {
         return addresses.get("MCD_VAT");
     }
 
+    String getProxyRegistryAddress() {
+        return addresses.get("PROXY_REGISTRY");
+    }
+
+    String getDaiAdapterAddress() {
+        return addresses.get("MCD_JOIN_DAI");
+    }
+
+    String getDaiAddress() {
+        return addresses.get("MCD_DAI");
+    }
+
     private String getMcdConfigFile(Web3j web3j) throws IOException {
         NetVersion version = web3j.netVersion().send();
         String network = version.getNetVersion();

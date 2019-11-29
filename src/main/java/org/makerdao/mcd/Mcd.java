@@ -11,18 +11,25 @@
  */
 package org.makerdao.mcd;
 
-import org.makerdao.mcd.contracts.DssProxyActionsDsr;
-import org.makerdao.mcd.contracts.Pot;
-import org.makerdao.mcd.contracts.Vat;
+import org.makerdao.mcd.contracts.*;
+import org.makerdao.mcd.core.*;
+import org.makerdao.mcd.ds.DSProxyService;
+import org.makerdao.mcd.ds.DSProxyServiceImpl;
 import org.makerdao.mcd.dsr.*;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.gas.ContractGasProvider;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Mcd {
 
     private McdConfig config;
     private SavingsService savingsService;
+    private DSProxyService dsProxyService;
+    private SmartContractService smartContractService;
+    private AllowanceService allowanceService;
 
     public Mcd(Web3j web3j, Credentials credentials, ContractGasProvider gasProvider) throws Exception {
         initServices(web3j, credentials, gasProvider);
@@ -30,17 +37,44 @@ public class Mcd {
 
     private void initServices(Web3j web3j, Credentials credentials, ContractGasProvider gasProvider) throws Exception {
         this.config = new McdConfig(web3j);
-        Pot potContract = Pot.load(config.getPotAddress(), web3j, credentials, gasProvider);
+
+        // tokens initialization
+        ERC20Token daiErc20Token = ERC20Token.load(config.getDaiAddress(), web3j, credentials, gasProvider);
+
+        // contracts initialization
+        Pot pot = Pot.load(config.getPotAddress(), web3j, credentials, gasProvider);
         DssProxyActionsDsr dssProxyActionsDsr = DssProxyActionsDsr.load(config.getDssProxyActionsDsrAddress(), web3j, credentials, gasProvider);
-        Vat vatContract = Vat.load(config.getVatAddress(), web3j, credentials, gasProvider);
-        savingsService = new SavingsServiceImpl(potContract, dssProxyActionsDsr, vatContract);
+        Vat vat = Vat.load(config.getVatAddress(), web3j, credentials, gasProvider);
+        ProxyRegistry proxyRegistry = ProxyRegistry.load(config.getProxyRegistryAddress(), web3j, credentials, gasProvider);
+
+        // services initialization
+
+        smartContractService = new SmartContractServiceImpl(web3j, credentials, gasProvider);
+        dsProxyService = new DSProxyServiceImpl(proxyRegistry, smartContractService);
+        savingsService = new SavingsServiceImpl(pot, dssProxyActionsDsr, vat, proxyRegistry, config.getDaiAdapterAddress());
+
+        Map<String, ERC20Token> tokens = new HashMap<>();
+        tokens.put(TokenSymbols.DAI, daiErc20Token);
+        allowanceService = new AllowanceServiceImpl(tokens);
     }
 
     public SavingsService getSavingsService() {
         return savingsService;
     }
 
+    public DSProxyService getDSProxyService() {
+        return dsProxyService;
+    }
+
     public McdConfig getMcdConfiguration() {
         return this.config;
+    }
+
+    public SmartContractService getSmartContractService() {
+        return smartContractService;
+    }
+
+    public AllowanceService getAllowanceService() {
+        return allowanceService;
     }
 }

@@ -9,26 +9,15 @@
  * more details.
  *
  */
-package org.makerdao.mcd.dsr;
+package org.makerdao.mcd.core;
 
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigDecimal;
 
-public interface SavingsService {
+public interface AllowanceService {
 
-    TransactionReceipt join(BigDecimal amountInDai) throws Exception;
+    TransactionReceipt requireAllowance(String owner, String receiver, String tokenSymbol, BigDecimal amountInDai) throws Exception;
 
-    TransactionReceipt exit(BigDecimal amountInDai) throws Exception;
-
-    TransactionReceipt exitAll() throws Exception;
-
-    BigDecimal getBalanceOf(String address) throws Exception;
-
-    BigDecimal getTotalDai() throws Exception;
-
-    BigDecimal getDsr() throws Exception;
-
-    BigDecimal chi() throws Exception;
-    
+    TransactionReceipt removeAllowance(String owner, String receiver, String tokenSymbol) throws Exception;
 }
