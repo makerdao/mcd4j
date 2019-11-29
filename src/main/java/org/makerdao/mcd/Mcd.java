@@ -11,6 +11,9 @@
  */
 package org.makerdao.mcd;
 
+import org.makerdao.mcd.contracts.DssProxyActionsDsr;
+import org.makerdao.mcd.contracts.Pot;
+import org.makerdao.mcd.contracts.Vat;
 import org.makerdao.mcd.dsr.*;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -35,5 +38,9 @@ public class Mcd {
 
     public SavingsService getSavingsService() {
         return savingsService;
+    }
+
+    public McdConfig getMcdConfiguration() {
+        return this.config;
     }
 }

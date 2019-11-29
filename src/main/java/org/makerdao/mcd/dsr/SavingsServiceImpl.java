@@ -11,6 +11,10 @@
  */
 package org.makerdao.mcd.dsr;
 
+import org.makerdao.mcd.contracts.DssProxyActionsDsr;
+import org.makerdao.mcd.contracts.Pot;
+import org.makerdao.mcd.contracts.Vat;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 
@@ -72,13 +76,4 @@ public class SavingsServiceImpl implements SavingsService {
         return new BigDecimal(this.pot.chi().send()).divide(RAY, MathContext.UNLIMITED);
     }
 
-    @Override
-    public String getDssProxyActionsDsrAddress() {
-        return this.dssProxyActionsDsr.getContractAddress();
-    }
-
-    @Override
-    public String getPotAddress() {
-        return this.pot.getContractAddress();
-    }
 }

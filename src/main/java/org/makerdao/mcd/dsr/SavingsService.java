@@ -30,8 +30,5 @@ public interface SavingsService {
     BigDecimal getDsr() throws Exception;
 
     BigDecimal chi() throws Exception;
-
-    String getDssProxyActionsDsrAddress();
-
-    String getPotAddress();
+    
 }

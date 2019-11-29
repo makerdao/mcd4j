@@ -21,6 +21,8 @@ import org.web3j.tx.gas.DefaultGasProvider;
 
 public class McdTest {
 
+    private static Mcd MCD_MAINNET;
+    private static Mcd MCD_KOVAN;
     private static SavingsService KOVAN_SAVINGS_SERVICE;
     private static SavingsService MAINNET_SAVINGS_SERVICE;
 
@@ -35,16 +37,16 @@ public class McdTest {
 
         try {
             Web3j web3jMainnet = Web3j.build(new HttpService(mainnetEndpoint));
-            Mcd mcdMainnet = new Mcd(web3jMainnet, credentials, new DefaultGasProvider());
-            MAINNET_SAVINGS_SERVICE = mcdMainnet.getSavingsService();
+            MCD_MAINNET = new Mcd(web3jMainnet, credentials, new DefaultGasProvider());
+            MAINNET_SAVINGS_SERVICE = MCD_MAINNET.getSavingsService();
         } catch (Exception ex) {
             System.out.println("mainnet MCD not initialized");
         }
 
         try {
             Web3j web3jKovan = Web3j.build(new HttpService(kovanEndpoint));
-            Mcd mcdKovan = new Mcd(web3jKovan, credentials, new DefaultGasProvider());
-            KOVAN_SAVINGS_SERVICE = mcdKovan.getSavingsService();
+            MCD_KOVAN = new Mcd(web3jKovan, credentials, new DefaultGasProvider());
+            KOVAN_SAVINGS_SERVICE = MCD_KOVAN.getSavingsService();
         } catch (Exception ex) {
             System.out.println("kovan MCD not initialized");
         }
@@ -55,13 +57,17 @@ public class McdTest {
     public void testSavingsService() {
 
         if (KOVAN_SAVINGS_SERVICE != null) {
-            assert KOVAN_SAVINGS_SERVICE.getPotAddress().equalsIgnoreCase("0xea190dbdc7adf265260ec4da6e9675fd4f5a78bb");
-            assert KOVAN_SAVINGS_SERVICE.getDssProxyActionsDsrAddress().equalsIgnoreCase("0xc5cc1dfb64a62b9c7bb6cbf53c2a579e2856bf92");
+            assert MCD_KOVAN.getMcdConfiguration().getPotAddress()
+                    .equalsIgnoreCase("0xea190dbdc7adf265260ec4da6e9675fd4f5a78bb");
+            assert MCD_KOVAN.getMcdConfiguration().getDssProxyActionsDsrAddress()
+                    .equalsIgnoreCase("0xc5cc1dfb64a62b9c7bb6cbf53c2a579e2856bf92");
         }
 
         if (MAINNET_SAVINGS_SERVICE != null) {
-            assert MAINNET_SAVINGS_SERVICE.getPotAddress().equalsIgnoreCase("0x197e90f9fad81970ba7976f33cbd77088e5d7cf7");
-            assert MAINNET_SAVINGS_SERVICE.getDssProxyActionsDsrAddress().equalsIgnoreCase("0x07ee93aeea0a36fff2a9b95dd22bd6049ee54f26");
+            assert MCD_MAINNET.getMcdConfiguration().getPotAddress()
+                    .equalsIgnoreCase("0x197e90f9fad81970ba7976f33cbd77088e5d7cf7");
+            assert MCD_MAINNET.getMcdConfiguration().getDssProxyActionsDsrAddress()
+                    .equalsIgnoreCase("0x07ee93aeea0a36fff2a9b95dd22bd6049ee54f26");
         }
 
     }

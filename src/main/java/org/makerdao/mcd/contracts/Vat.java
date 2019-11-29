@@ -9,7 +9,7 @@
  * more details.
  *
  */
-package org.makerdao.mcd.dsr;
+package org.makerdao.mcd.contracts;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
