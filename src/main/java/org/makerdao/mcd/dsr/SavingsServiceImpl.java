@@ -13,7 +13,6 @@ package org.makerdao.mcd.dsr;
 
 import org.makerdao.mcd.contracts.DssProxyActionsDsr;
 import org.makerdao.mcd.contracts.Pot;
-import org.makerdao.mcd.contracts.ProxyRegistry;
 import org.makerdao.mcd.contracts.Vat;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
@@ -27,15 +26,12 @@ public class SavingsServiceImpl implements SavingsService {
     Pot pot;
     Vat vat;
     DssProxyActionsDsr dssProxyActionsDsr;
-    ProxyRegistry proxyRegistry;
     String daiAdapterAddress;
 
-    public SavingsServiceImpl(Pot pot, DssProxyActionsDsr dssProxyActionsDsr, Vat vat, ProxyRegistry proxyRegistry,
-                              String daiAdapterAddress) {
+    public SavingsServiceImpl(Pot pot, DssProxyActionsDsr dssProxyActionsDsr, Vat vat, String daiAdapterAddress) {
         this.pot = pot;
         this.vat = vat;
         this.dssProxyActionsDsr = dssProxyActionsDsr;
-        this.proxyRegistry = proxyRegistry;
         this.daiAdapterAddress = daiAdapterAddress;
     }
 
@@ -56,32 +52,31 @@ public class SavingsServiceImpl implements SavingsService {
         return this.dssProxyActionsDsr.exitAll(this.daiAdapterAddress, pot.getContractAddress()).send();
     }
 
-
     @Override
     public BigDecimal getBalanceOf(String guy) throws Exception {
-        BigDecimal slice = new BigDecimal(this.pot.pie(guy).send()).divide(WAD, MathContext.UNLIMITED);
-        BigDecimal totalPie = new BigDecimal(this.pot.Pie().send()).divide(WAD, MathContext.UNLIMITED);
+        BigDecimal slice = new BigDecimal(this.pot.pie(guy).send());
+        BigDecimal totalPie = new BigDecimal(this.pot.Pie().send());
 
-        BigDecimal portion = totalPie.equals(BigDecimal.ZERO) ? totalPie : slice.divide(totalPie, MathContext.UNLIMITED);
-        BigDecimal daiInPot = new BigDecimal(vat.dai(this.pot.getContractAddress()).send()).divide(RAD, MathContext.UNLIMITED);
+        BigDecimal portion = totalPie.equals(BigDecimal.ZERO) ? totalPie : slice.divide(totalPie, MathContext.DECIMAL128);
+        BigDecimal daiInPot = new BigDecimal(vat.dai(this.pot.getContractAddress()).send()).divide(RAD, MathContext.DECIMAL128);
 
         return daiInPot.multiply(portion);
     }
 
     @Override
     public BigDecimal getTotalDai() throws Exception {
-        BigDecimal totalPie = new BigDecimal(this.pot.Pie().send()).divide(WAD, MathContext.UNLIMITED);
+        BigDecimal totalPie = new BigDecimal(this.pot.Pie().send()).divide(WAD, MathContext.DECIMAL128);
         return totalPie.multiply(chi());
     }
 
     @Override
     public BigDecimal getDsr() throws Exception {
-        return new BigDecimal(this.pot.dsr().send()).divide(RAY, MathContext.UNLIMITED);
+        return new BigDecimal(this.pot.dsr().send()).divide(RAY, MathContext.DECIMAL128);
     }
 
     @Override
     public BigDecimal chi() throws Exception {
-        return new BigDecimal(this.pot.chi().send()).divide(RAY, MathContext.UNLIMITED);
+        return new BigDecimal(this.pot.chi().send()).divide(RAY, MathContext.DECIMAL128);
     }
 
 }

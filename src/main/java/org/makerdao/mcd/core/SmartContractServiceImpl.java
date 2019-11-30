@@ -33,7 +33,6 @@ public class SmartContractServiceImpl implements SmartContractService {
     @Override
     public Contract getContractByAddress(Class contractClass, String address) throws Exception {
         Method loadContract = contractClass.getDeclaredMethod("load", String.class, Web3j.class, Credentials.class, ContractGasProvider.class);
-        Contract contract = (Contract) loadContract.invoke(null, address, web3j, credentials, gasProvider);
-        return contract;
+        return (Contract) loadContract.invoke(null, address, web3j, credentials, gasProvider);
     }
 }

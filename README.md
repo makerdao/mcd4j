@@ -32,7 +32,7 @@ AllowanceService allowanceService = mcd.getAllowanceService();
 BigDecimal totalDai = savingsService.getTotalDai();
 
 // join DAI
-// 1 - get ds proxy address from registered account, if no proxy then create one
+// 1 - get ds proxy address for registered account, if no proxy then create one
 String dsProxyAddress = dsProxyService.getProxyAddress("0xD71..........", true);
 // Do something with dsProxyAddress
 
