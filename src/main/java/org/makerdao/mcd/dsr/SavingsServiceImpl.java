@@ -39,13 +39,13 @@ public class SavingsServiceImpl implements SavingsService {
     @Override
     public TransactionReceipt join(BigDecimal amountInDai) throws Exception {
         return dssProxyActionsDsr.join(daiJoin.getContractAddress(), pot.getContractAddress(),
-                amountInDai.toBigInteger().multiply(WAD.toBigInteger())).send();
+                amountInDai.multiply(WAD).toBigInteger()).send();
     }
 
     @Override
     public TransactionReceipt exit(BigDecimal amountInDai) throws Exception {
         return dssProxyActionsDsr.exit(daiJoin.getContractAddress(), pot.getContractAddress(),
-                amountInDai.toBigInteger().multiply(WAD.toBigInteger())).send();
+                amountInDai.multiply(WAD).toBigInteger()).send();
     }
 
     @Override
