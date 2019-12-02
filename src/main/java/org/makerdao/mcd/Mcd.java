@@ -46,12 +46,13 @@ public class Mcd {
         DssProxyActionsDsr dssProxyActionsDsr = DssProxyActionsDsr.load(config.getDssProxyActionsDsrAddress(), web3j, credentials, gasProvider);
         Vat vat = Vat.load(config.getVatAddress(), web3j, credentials, gasProvider);
         ProxyRegistry proxyRegistry = ProxyRegistry.load(config.getProxyRegistryAddress(), web3j, credentials, gasProvider);
+        DaiJoin daiJoin = DaiJoin.load(config.getDaiAdapterAddress(), web3j, credentials, gasProvider);
 
         // services initialization
 
         smartContractService = new SmartContractServiceImpl(web3j, credentials, gasProvider);
         dsProxyService = new DSProxyServiceImpl(proxyRegistry, smartContractService);
-        savingsService = new SavingsServiceImpl(pot, dssProxyActionsDsr, vat, config.getDaiAdapterAddress());
+        savingsService = new SavingsServiceImpl(pot, dssProxyActionsDsr, vat, daiJoin);
 
         Map<String, ERC20Token> tokens = new HashMap<>();
         tokens.put(TokenSymbols.DAI, daiErc20Token);

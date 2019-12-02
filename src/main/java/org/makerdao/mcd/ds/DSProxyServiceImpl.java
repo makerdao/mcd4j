@@ -19,8 +19,8 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 public class DSProxyServiceImpl implements DSProxyService {
 
-    ProxyRegistry proxyRegistry;
-    SmartContractService smartContractService;
+    private ProxyRegistry proxyRegistry;
+    private SmartContractService smartContractService;
 
     public DSProxyServiceImpl(ProxyRegistry proxyRegistry, SmartContractService smartContractService) {
         this.proxyRegistry = proxyRegistry;
@@ -29,14 +29,14 @@ public class DSProxyServiceImpl implements DSProxyService {
 
     @Override
     public String getProxyAddress(String ownerAddress, boolean create) throws Exception {
-        String proxyAddress = this.proxyRegistry.proxies(ownerAddress).send();
+        String proxyAddress = proxyRegistry.proxies(ownerAddress).send();
         if (proxyAddress.equals("0x0000000000000000000000000000000000000000")) {
             proxyAddress = null;
         }
 
         if (proxyAddress == null) {
             if (create) {
-                TransactionReceipt receipt = this.proxyRegistry.build(ownerAddress).send();
+                TransactionReceipt receipt = proxyRegistry.build(ownerAddress).send();
                 if (receipt.isStatusOK()) {
                     proxyAddress = receipt.getLogs().get(0).getAddress();
                 }
@@ -51,13 +51,13 @@ public class DSProxyServiceImpl implements DSProxyService {
 
     @Override
     public String getOwner(String proxyAddress) throws Exception {
-        DSProxy contract = (DSProxy) this.smartContractService.getContractByAddress(DSProxy.class, proxyAddress);
+        DSProxy contract = (DSProxy) smartContractService.getContractByAddress(DSProxy.class, proxyAddress);
         return contract.owner().send();
     }
 
     @Override
     public TransactionReceipt setOwner(String proxyAddress, String ownerAddress) throws Exception {
-        DSProxy contract = (DSProxy) this.smartContractService.getContractByAddress(DSProxy.class, proxyAddress);
+        DSProxy contract = (DSProxy) smartContractService.getContractByAddress(DSProxy.class, proxyAddress);
         return contract.setOwner(ownerAddress).send();
     }
 }

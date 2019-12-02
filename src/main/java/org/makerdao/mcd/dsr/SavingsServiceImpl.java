@@ -11,6 +11,7 @@
  */
 package org.makerdao.mcd.dsr;
 
+import org.makerdao.mcd.contracts.DaiJoin;
 import org.makerdao.mcd.contracts.DssProxyActionsDsr;
 import org.makerdao.mcd.contracts.Pot;
 import org.makerdao.mcd.contracts.Vat;
@@ -26,57 +27,57 @@ public class SavingsServiceImpl implements SavingsService {
     Pot pot;
     Vat vat;
     DssProxyActionsDsr dssProxyActionsDsr;
-    String daiAdapterAddress;
+    DaiJoin daiJoin;
 
-    public SavingsServiceImpl(Pot pot, DssProxyActionsDsr dssProxyActionsDsr, Vat vat, String daiAdapterAddress) {
+    public SavingsServiceImpl(Pot pot, DssProxyActionsDsr dssProxyActionsDsr, Vat vat, DaiJoin daiJoin) {
         this.pot = pot;
         this.vat = vat;
         this.dssProxyActionsDsr = dssProxyActionsDsr;
-        this.daiAdapterAddress = daiAdapterAddress;
+        this.daiJoin = daiJoin;
     }
 
     @Override
     public TransactionReceipt join(BigDecimal amountInDai) throws Exception {
-        return this.dssProxyActionsDsr.join(this.daiAdapterAddress, pot.getContractAddress(),
+        return dssProxyActionsDsr.join(daiJoin.getContractAddress(), pot.getContractAddress(),
                 amountInDai.toBigInteger().multiply(WAD.toBigInteger())).send();
     }
 
     @Override
     public TransactionReceipt exit(BigDecimal amountInDai) throws Exception {
-        return this.dssProxyActionsDsr.exit(this.daiAdapterAddress, pot.getContractAddress(),
+        return dssProxyActionsDsr.exit(daiJoin.getContractAddress(), pot.getContractAddress(),
                 amountInDai.toBigInteger().multiply(WAD.toBigInteger())).send();
     }
 
     @Override
     public TransactionReceipt exitAll() throws Exception {
-        return this.dssProxyActionsDsr.exitAll(this.daiAdapterAddress, pot.getContractAddress()).send();
+        return dssProxyActionsDsr.exitAll(daiJoin.getContractAddress(), pot.getContractAddress()).send();
     }
 
     @Override
     public BigDecimal getBalanceOf(String guy) throws Exception {
-        BigDecimal slice = new BigDecimal(this.pot.pie(guy).send());
-        BigDecimal totalPie = new BigDecimal(this.pot.Pie().send());
+        BigDecimal slice = new BigDecimal(pot.pie(guy).send());
+        BigDecimal totalPie = new BigDecimal(pot.Pie().send());
 
         BigDecimal portion = totalPie.equals(BigDecimal.ZERO) ? totalPie : slice.divide(totalPie, MathContext.DECIMAL128);
-        BigDecimal daiInPot = new BigDecimal(vat.dai(this.pot.getContractAddress()).send()).divide(RAD, MathContext.DECIMAL128);
+        BigDecimal daiInPot = new BigDecimal(vat.dai(pot.getContractAddress()).send()).divide(RAD, MathContext.DECIMAL128);
 
         return daiInPot.multiply(portion);
     }
 
     @Override
     public BigDecimal getTotalDai() throws Exception {
-        BigDecimal totalPie = new BigDecimal(this.pot.Pie().send()).divide(WAD, MathContext.DECIMAL128);
+        BigDecimal totalPie = new BigDecimal(pot.Pie().send()).divide(WAD, MathContext.DECIMAL128);
         return totalPie.multiply(chi());
     }
 
     @Override
     public BigDecimal getDsr() throws Exception {
-        return new BigDecimal(this.pot.dsr().send()).divide(RAY, MathContext.DECIMAL128);
+        return new BigDecimal(pot.dsr().send()).divide(RAY, MathContext.DECIMAL128);
     }
 
     @Override
     public BigDecimal chi() throws Exception {
-        return new BigDecimal(this.pot.chi().send()).divide(RAY, MathContext.DECIMAL128);
+        return new BigDecimal(pot.chi().send()).divide(RAY, MathContext.DECIMAL128);
     }
 
 }
