@@ -33,7 +33,8 @@ AllowanceService allowanceService = mcd.getAllowanceService();
 // get total DAI in DSR
 BigDecimal totalDai = savingsService.getTotalDai();
 
-// 1 - get ds proxy for registered ETH account, if no proxy then create one
+// 1 - get ds proxy for registered ETH account, if no proxy then create one.
+// Subsequent calls to DSProxyService.getProxy return same instance of DSProxy object
 DSProxy dsProxy = dsProxyService.getProxy(registeredEthAccount, true);
 
 // 2 - set proxy allowance of 10 DAI
