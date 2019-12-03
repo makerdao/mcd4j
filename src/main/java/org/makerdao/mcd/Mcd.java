@@ -52,7 +52,7 @@ public class Mcd {
 
         smartContractService = new SmartContractServiceImpl(web3j, credentials, gasProvider);
         dsProxyService = new DSProxyServiceImpl(proxyRegistry, smartContractService);
-        savingsService = new SavingsServiceImpl(pot, dssProxyActionsDsr, vat, daiJoin);
+        savingsService = new SavingsServiceImpl(pot, dsProxyService, dssProxyActionsDsr, vat, daiJoin);
 
         Map<String, ERC20Token> tokens = new HashMap<>();
         tokens.put(TokenSymbols.DAI, daiErc20Token);

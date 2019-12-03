@@ -11,17 +11,18 @@
  */
 package org.makerdao.mcd.dsr;
 
+import org.makerdao.mcd.contracts.DSProxy;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigDecimal;
 
 public interface SavingsService {
 
-    TransactionReceipt join(BigDecimal amountInDai) throws Exception;
+    TransactionReceipt join(DSProxy dsProxy, BigDecimal amountInDai) throws Exception;
 
-    TransactionReceipt exit(BigDecimal amountInDai) throws Exception;
+    TransactionReceipt exit(DSProxy dsProxy, BigDecimal amountInDai) throws Exception;
 
-    TransactionReceipt exitAll() throws Exception;
+    TransactionReceipt exitAll(DSProxy dsProxy) throws Exception;
 
     BigDecimal getBalanceOf(String address) throws Exception;
 

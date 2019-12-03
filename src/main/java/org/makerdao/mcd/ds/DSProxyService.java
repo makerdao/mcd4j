@@ -11,13 +11,17 @@
  */
 package org.makerdao.mcd.ds;
 
+import org.makerdao.mcd.contracts.DSProxy;
+import org.web3j.abi.datatypes.Function;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 public interface DSProxyService {
 
-    String getProxyAddress(String ownerAddress, boolean create) throws Exception;
+    DSProxy getProxy(String ownerAddress, boolean create) throws Exception;
 
-    String getOwner(String proxyAddress) throws Exception;
+    TransactionReceipt execute(DSProxy dsProxy, String address, Function function) throws Exception;
 
-    TransactionReceipt setOwner(String proxyAddress, String owner) throws Exception;
+    String getOwner(DSProxy dsProxy) throws Exception;
+
+    TransactionReceipt setOwner(DSProxy dsProxy, String owner) throws Exception;
 }

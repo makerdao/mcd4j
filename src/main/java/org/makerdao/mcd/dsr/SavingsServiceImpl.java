@@ -11,10 +11,9 @@
  */
 package org.makerdao.mcd.dsr;
 
-import org.makerdao.mcd.contracts.DaiJoin;
-import org.makerdao.mcd.contracts.DssProxyActionsDsr;
-import org.makerdao.mcd.contracts.Pot;
-import org.makerdao.mcd.contracts.Vat;
+import org.makerdao.mcd.contracts.*;
+import org.makerdao.mcd.ds.DSProxyService;
+import org.web3j.abi.datatypes.Function;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigDecimal;
@@ -26,31 +25,36 @@ public class SavingsServiceImpl implements SavingsService {
 
     Pot pot;
     Vat vat;
+    DSProxyService dsProxyService;
     DssProxyActionsDsr dssProxyActionsDsr;
     DaiJoin daiJoin;
 
-    public SavingsServiceImpl(Pot pot, DssProxyActionsDsr dssProxyActionsDsr, Vat vat, DaiJoin daiJoin) {
+    public SavingsServiceImpl(Pot pot, DSProxyService dsProxyService, DssProxyActionsDsr dssProxyActionsDsr, Vat vat, DaiJoin daiJoin) {
         this.pot = pot;
         this.vat = vat;
+        this.dsProxyService = dsProxyService;
         this.dssProxyActionsDsr = dssProxyActionsDsr;
         this.daiJoin = daiJoin;
     }
 
     @Override
-    public TransactionReceipt join(BigDecimal amountInDai) throws Exception {
-        return dssProxyActionsDsr.join(daiJoin.getContractAddress(), pot.getContractAddress(),
-                amountInDai.multiply(WAD).toBigInteger()).send();
+    public TransactionReceipt join(DSProxy dsProxy, BigDecimal amountInDai) throws Exception {
+        Function joinFunction = dssProxyActionsDsr.getJoinFunction(daiJoin.getContractAddress(), pot.getContractAddress(),
+                amountInDai.multiply(WAD).toBigInteger());
+        return dsProxyService.execute(dsProxy, dssProxyActionsDsr.getContractAddress(), joinFunction);
     }
 
     @Override
-    public TransactionReceipt exit(BigDecimal amountInDai) throws Exception {
-        return dssProxyActionsDsr.exit(daiJoin.getContractAddress(), pot.getContractAddress(),
-                amountInDai.multiply(WAD).toBigInteger()).send();
+    public TransactionReceipt exit(DSProxy dsProxy, BigDecimal amountInDai) throws Exception {
+        Function exitFunction = dssProxyActionsDsr.getExitFunction(daiJoin.getContractAddress(), pot.getContractAddress(),
+                amountInDai.multiply(WAD).toBigInteger());
+        return dsProxyService.execute(dsProxy, dssProxyActionsDsr.getContractAddress(), exitFunction);
     }
 
     @Override
-    public TransactionReceipt exitAll() throws Exception {
-        return dssProxyActionsDsr.exitAll(daiJoin.getContractAddress(), pot.getContractAddress()).send();
+    public TransactionReceipt exitAll(DSProxy dsProxy) throws Exception {
+        Function exitAllFunction = dssProxyActionsDsr.getExitAllFunction(daiJoin.getContractAddress(), pot.getContractAddress());
+        return dsProxyService.execute(dsProxy, dssProxyActionsDsr.getContractAddress(), exitAllFunction);
     }
 
     @Override

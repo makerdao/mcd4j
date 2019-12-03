@@ -83,6 +83,15 @@ public class DssProxyActionsDsr extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
+    public Function getExitFunction(String daiJoin, String pot, BigInteger wad) {
+        return new Function(
+                FUNC_EXIT,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(daiJoin),
+                        new org.web3j.abi.datatypes.Address(pot),
+                        new org.web3j.abi.datatypes.generated.Uint256(wad)),
+                Collections.<TypeReference<?>>emptyList());
+    }
+
     public RemoteCall<TransactionReceipt> exitAll(String daiJoin, String pot) {
         final Function function = new Function(
                 FUNC_EXITALL, 
@@ -90,6 +99,14 @@ public class DssProxyActionsDsr extends Contract {
                 new org.web3j.abi.datatypes.Address(pot)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
+    }
+
+    public Function getExitAllFunction(String daiJoin, String pot) {
+        return new Function(
+                FUNC_EXITALL,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(daiJoin),
+                        new org.web3j.abi.datatypes.Address(pot)),
+                Collections.<TypeReference<?>>emptyList());
     }
 
     public RemoteCall<TransactionReceipt> join(String daiJoin, String pot, BigInteger wad) {
@@ -100,6 +117,15 @@ public class DssProxyActionsDsr extends Contract {
                 new org.web3j.abi.datatypes.generated.Uint256(wad)), 
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
+    }
+
+    public Function getJoinFunction(String daiJoin, String pot, BigInteger wad) {
+        return new Function(
+                FUNC_JOIN,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(daiJoin),
+                        new org.web3j.abi.datatypes.Address(pot),
+                        new org.web3j.abi.datatypes.generated.Uint256(wad)),
+                Collections.<TypeReference<?>>emptyList());
     }
 
     @Deprecated

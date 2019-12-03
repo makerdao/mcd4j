@@ -20,6 +20,8 @@ For running tests on mainnet:
 ### Usage:
 
 ```java
+String registeredEthAccount = "0xD71..........";
+
 // Instantiate Mcd object
 Mcd mcd = new Mcd(web3j, credentials, gasProvider);
 
@@ -28,35 +30,35 @@ SavingsService savingsService = mcd.getSavingsService();
 DSProxyService dsProxyService = mcd.getDSProxyService();
 AllowanceService allowanceService = mcd.getAllowanceService();
 
-// get total DAI
+// get total DAI in DSR
 BigDecimal totalDai = savingsService.getTotalDai();
 
-// join DAI
-// 1 - get ds proxy address for registered account, if no proxy then create one
-String dsProxyAddress = dsProxyService.getProxyAddress("0xD71..........", true);
-// Do something with dsProxyAddress
+// 1 - get ds proxy for registered ETH account, if no proxy then create one
+DSProxy dsProxy = dsProxyService.getProxy(registeredEthAccount, true);
 
-// 2 - set proxy actions allowance for 10 DAI
-allowanceService.requireAllowance("0xD71..........",
-                    mcd.getMcdConfiguration().getDssProxyActionsDsrAddress(),
+// 2 - set proxy allowance of 10 DAI
+allowanceService.requireAllowance(registeredEthAccount,
+                    dsProxy.getContractAddress(),
                     TokenSymbols.DAI,
                     BigDecimal.TEN);
 
 // 3 - join 3 DAI
-TransactionReceipt receiptJoinThreeDai = savingsService.join(BigDecimal.valueOf(3));
+TransactionReceipt receiptJoinThreeDai = savingsService.join(dsProxy, BigDecimal.valueOf(3));
 // Do something with TransactionReceipt
+// check proxy DSR balance
+BigDecimal balance = savingsService.getBalanceOf(dsProxy.getContractAddress());
 
 // 4 - exit 1 DAI
-TransactionReceipt receiptExitOneDai = savingsService.exit(BigDecimal.ONE);
+TransactionReceipt receiptExitOneDai = savingsService.exit(dsProxy, BigDecimal.ONE);
 // Do something with TransactionReceipt
 
 // 5 - exit all DAI
-TransactionReceipt receiptExitAllDai = savingsService.exitAll();
+TransactionReceipt receiptExitAllDai = savingsService.exitAll(dsProxy);
 // Do something with TransactionReceipt
 
 // 6 - remove proxy actions allowance
-allowanceService.removeAllowance("0xD71..........",
-                     mcd.getMcdConfiguration().getDssProxyActionsDsrAddress(),
+allowanceService.removeAllowance(registeredEthAccount,
+                     dsProxy.getContractAddress(),
                      TokenSymbols.DAI);
 ```
 

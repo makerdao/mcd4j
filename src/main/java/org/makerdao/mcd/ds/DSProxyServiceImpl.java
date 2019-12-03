@@ -15,12 +15,19 @@ import org.makerdao.mcd.contracts.DSProxy;
 import org.makerdao.mcd.contracts.ProxyRegistry;
 import org.makerdao.mcd.core.SmartContractService;
 import org.makerdao.mcd.exceptions.DSProxyException;
+
+import org.web3j.abi.datatypes.Function;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DSProxyServiceImpl implements DSProxyService {
 
     private ProxyRegistry proxyRegistry;
     private SmartContractService smartContractService;
+    private Map<String, DSProxy> proxyMap = new HashMap<>();
 
     public DSProxyServiceImpl(ProxyRegistry proxyRegistry, SmartContractService smartContractService) {
         this.proxyRegistry = proxyRegistry;
@@ -28,7 +35,13 @@ public class DSProxyServiceImpl implements DSProxyService {
     }
 
     @Override
-    public String getProxyAddress(String ownerAddress, boolean create) throws Exception {
+    public DSProxy getProxy(String ownerAddress, boolean create) throws Exception {
+
+        DSProxy cachedProxy = proxyMap.get(ownerAddress);
+        if (cachedProxy != null) {
+            return cachedProxy;
+        }
+
         String proxyAddress = proxyRegistry.proxies(ownerAddress).send();
         if (proxyAddress.equals("0x0000000000000000000000000000000000000000")) {
             proxyAddress = null;
@@ -45,19 +58,28 @@ public class DSProxyServiceImpl implements DSProxyService {
             }
         }
 
-        return proxyAddress;
+        DSProxy dsProxy = (DSProxy) smartContractService.getContractByAddress(DSProxy.class, proxyAddress);
+        proxyMap.put(ownerAddress, dsProxy);
+        return dsProxy;
+    }
+
+    public TransactionReceipt execute(DSProxy dsProxy, String address, Function function) throws Exception {
+        return dsProxy.executeEncodedTransaction(dsProxy.getContractAddress(),
+                ExecuteFunctionEncoder.encodeFunction(address, function),
+                BigInteger.ZERO,
+                function.getName(),
+                false);
 
     }
 
     @Override
-    public String getOwner(String proxyAddress) throws Exception {
-        DSProxy contract = (DSProxy) smartContractService.getContractByAddress(DSProxy.class, proxyAddress);
-        return contract.owner().send();
+    public String getOwner(DSProxy dsProxy) throws Exception {
+        return dsProxy.owner().send();
     }
 
     @Override
-    public TransactionReceipt setOwner(String proxyAddress, String ownerAddress) throws Exception {
-        DSProxy contract = (DSProxy) smartContractService.getContractByAddress(DSProxy.class, proxyAddress);
-        return contract.setOwner(ownerAddress).send();
+    public TransactionReceipt setOwner(DSProxy dsProxy, String ownerAddress) throws Exception {
+        return dsProxy.setOwner(ownerAddress).send();
     }
+
 }
