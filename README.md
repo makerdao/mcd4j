@@ -10,6 +10,16 @@ Java library for interacting with MCD
     mvn clean
     mvn package -Dmaven.test.skip=true
     
+##### Install in local maven repository:
+    mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=target/mcd4j-1.0-SNAPSHOT.jar
+
+##### Use in pom.xml:
+        <dependency>
+            <groupId>org.makerdao</groupId>
+            <artifactId>mcd4j</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
 
 ### Usage:
 
