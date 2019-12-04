@@ -59,3 +59,9 @@ allowanceService.removeAllowance(registeredEthAccount,
 
 See examples/DsrExample.java for an example
 
+### Testing
+
+Prerequisites:
+* [docker and docker-compose](https://www.docker.com/get-started)
+
+`./test.sh`

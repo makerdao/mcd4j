@@ -74,12 +74,7 @@ public class DssProxyActionsDsr extends Contract {
     }
 
     public RemoteCall<TransactionReceipt> exit(String daiJoin, String pot, BigInteger wad) {
-        final Function function = new Function(
-                FUNC_EXIT, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(daiJoin), 
-                new org.web3j.abi.datatypes.Address(pot), 
-                new org.web3j.abi.datatypes.generated.Uint256(wad)), 
-                Collections.<TypeReference<?>>emptyList());
+        final Function function = getExitFunction(daiJoin, pot, wad);
         return executeRemoteCallTransaction(function);
     }
 
@@ -93,11 +88,7 @@ public class DssProxyActionsDsr extends Contract {
     }
 
     public RemoteCall<TransactionReceipt> exitAll(String daiJoin, String pot) {
-        final Function function = new Function(
-                FUNC_EXITALL, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(daiJoin), 
-                new org.web3j.abi.datatypes.Address(pot)), 
-                Collections.<TypeReference<?>>emptyList());
+        final Function function = getExitAllFunction(daiJoin, pot);
         return executeRemoteCallTransaction(function);
     }
 
@@ -110,12 +101,7 @@ public class DssProxyActionsDsr extends Contract {
     }
 
     public RemoteCall<TransactionReceipt> join(String daiJoin, String pot, BigInteger wad) {
-        final Function function = new Function(
-                FUNC_JOIN, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(daiJoin), 
-                new org.web3j.abi.datatypes.Address(pot), 
-                new org.web3j.abi.datatypes.generated.Uint256(wad)), 
-                Collections.<TypeReference<?>>emptyList());
+        final Function function = getJoinFunction(daiJoin, pot, wad);
         return executeRemoteCallTransaction(function);
     }
 

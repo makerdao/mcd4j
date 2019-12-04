@@ -12,5 +12,4 @@
 package org.makerdao.mcd.ds;
 
 public class DSProxyServiceTest {
-
 }

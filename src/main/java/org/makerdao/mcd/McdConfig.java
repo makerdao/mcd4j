@@ -60,6 +60,15 @@ class McdConfig {
     private String getMcdConfigFile(Web3j web3j) throws IOException {
         NetVersion version = web3j.netVersion().send();
         String network = version.getNetVersion();
-        return network.equalsIgnoreCase(Long.toString(ChainIdLong.MAINNET)) ? "mainnet.json" : "kovan.json";
+
+        if (network.equalsIgnoreCase(Long.toString(ChainIdLong.MAINNET))) {
+            return "mainnet.json";
+        }
+
+        if (network.equalsIgnoreCase(Long.toString(ChainIdLong.KOVAN))) {
+            return "kovan.json";
+        }
+
+        return "testnet.json";
     }
 }

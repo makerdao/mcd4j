@@ -19,12 +19,24 @@ import org.web3j.utils.Numeric;
 
 abstract class ExecuteFunctionEncoder extends DefaultFunctionEncoder {
 
+    /**
+     * Encode DSProxy.execute(address _target, bytes _data) function.
+     *
+     * @param address - target contract address (e.g. DssProxyActionsDsr address)
+     * @param function - function to execute on target contract
+     *                 e.g. DssProxyActionsDsr.exit(address daiJoin, address pot, uint wad)
+     *                      DssProxyActionsDsr.exitAll(address daiJoin, address pot)
+     *                      DssProxyActionsDsr.join(address daiJoin, address pot, uint wad)
+     *
+     * @return data - DSProxy.execute data
+     *
+     */
     static String encodeFunction(String address, Function function) {
-        String data = "0x1cff79cd";
-        data = data + TypeEncoder.encode(new Address(address));
+        String data = "0x1cff79cd"; // DSProxy.execute method
+        data = data + TypeEncoder.encode(new Address(address)); // _target parameter
         data = data + "0000000000000000000000000000000000000000000000000000000000000040";
         data = data + "0000000000000000000000000000000000000000000000000000000000000064";
-        data = data + new String(Numeric.cleanHexPrefix(encode(function)).getBytes());
+        data = data + new String(Numeric.cleanHexPrefix(encode(function)).getBytes()); // _data parameter
         return data;
     }
 }
