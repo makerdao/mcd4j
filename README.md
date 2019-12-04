@@ -11,10 +11,7 @@ Java library for interacting with MCD
     mvn package -Dmaven.test.skip=true
 
 For running tests on kovan:  
-    `mvn -DprivateKey=71F1EA.. -DkovanEndpoint=https://localhost:8545/ test`
-
-For running tests on mainnet:  
-    `mvn -DprivateKey=71F1EA.. -DmainnetEndpoint=https://localhost:8545/ test`
+    `mvn test`
     
 
 ### Usage:
@@ -30,9 +27,6 @@ SavingsService savingsService = mcd.getSavingsService();
 DSProxyService dsProxyService = mcd.getDSProxyService();
 AllowanceService allowanceService = mcd.getAllowanceService();
 
-// get total DAI in DSR
-BigDecimal totalDai = savingsService.getTotalDai();
-
 // 1 - get ds proxy for registered ETH account, if no proxy then create one.
 // Subsequent calls to DSProxyService.getProxy return same instance of DSProxy object
 DSProxy dsProxy = dsProxyService.getProxy(registeredEthAccount, true);
@@ -47,7 +41,7 @@ allowanceService.requireAllowance(registeredEthAccount,
 TransactionReceipt receiptJoinThreeDai = savingsService.join(dsProxy, BigDecimal.valueOf(3));
 // Do something with TransactionReceipt
 // check proxy DSR balance
-BigDecimal balance = savingsService.getBalanceOf(dsProxy.getContractAddress());
+BigDecimal myDsrBalance = savingsService.getBalanceOf(dsProxy.getContractAddress());
 
 // 4 - exit 1 DAI
 TransactionReceipt receiptExitOneDai = savingsService.exit(dsProxy, BigDecimal.ONE);
@@ -63,5 +57,5 @@ allowanceService.removeAllowance(registeredEthAccount,
                      TokenSymbols.DAI);
 ```
 
-See McdTest.java for sample
+See examples/DsrExample.java for an example
 
