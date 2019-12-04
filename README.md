@@ -9,9 +9,6 @@ Java library for interacting with MCD
 ### Build:
     mvn clean
     mvn package -Dmaven.test.skip=true
-
-For running tests on kovan:  
-    `mvn test`
     
 
 ### Usage:
@@ -62,6 +59,7 @@ See examples/DsrExample.java for an example
 ### Testing
 
 Prerequisites:
-* [docker and docker-compose](https://www.docker.com/get-started)
+* dai.js testchain started (see https://github.com/makerdao/dai.js#running-the-testchain)
+* testchain account `0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6` funded with 50 DAI or more (see https://github.com/makerdao/dai.js/blob/dev/packages/dai-plugin-mcd/test/SavingsService.spec.js#L41 for how to open a Vault and generate DAI)
 
-`./test.sh`
+For running tests on testchain:  `mvn test`

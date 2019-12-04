@@ -40,6 +40,7 @@ public class Mcd {
 
         // tokens initialization
         ERC20Token daiErc20Token = ERC20Token.load(config.getDaiAddress(), web3j, credentials, gasProvider);
+        ERC20Token batErc20Token = ERC20Token.load(config.getBatAddress(), web3j, credentials, gasProvider);
 
         // contracts initialization
         Pot pot = Pot.load(config.getPotAddress(), web3j, credentials, gasProvider);
@@ -56,6 +57,7 @@ public class Mcd {
 
         Map<String, ERC20Token> tokens = new HashMap<>();
         tokens.put(TokenSymbols.DAI, daiErc20Token);
+        tokens.put(TokenSymbols.BAT, batErc20Token);
         allowanceService = new AllowanceServiceImpl(tokens);
     }
 

@@ -13,4 +13,5 @@ package org.makerdao.mcd.core;
 
 public interface TokenSymbols {
     String DAI = "DAI";
+    String BAT = "BAT";
 }

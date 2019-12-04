@@ -57,6 +57,10 @@ class McdConfig {
         return addresses.get("MCD_DAI");
     }
 
+    String getBatAddress() {
+        return addresses.get("BAT");
+    }
+
     private String getMcdConfigFile(Web3j web3j) throws IOException {
         NetVersion version = web3j.netVersion().send();
         String network = version.getNetVersion();

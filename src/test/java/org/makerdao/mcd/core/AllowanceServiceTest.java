@@ -38,8 +38,8 @@ public class AllowanceServiceTest {
     public void beforeTest() throws Exception {
         daiToken = mock(ERC20Token.class);
         tokens.put(TokenSymbols.DAI, daiToken);
-        mcd = new Mcd(Web3j.build(new HttpService("http://localhost:8555")),
-                Credentials.create("0x91cf2cc3671a365fcbf38010ff97ee31a5b7e674842663c56769e41600696ead"),
+        mcd = new Mcd(Web3j.build(new HttpService("http://localhost:2000")),
+                Credentials.create("474beb999fed1b3af2ea048f963833c686a0fba05f5724cb6417cf3b8ee9697e"),
                 new DefaultGasProvider());
     }
 
@@ -52,8 +52,8 @@ public class AllowanceServiceTest {
     @Test
     public void testRequireAllowance() throws Exception {
         AllowanceService allowanceService = mcd.getAllowanceService();
-        TransactionReceipt receipt = allowanceService.requireAllowance("0x9596c16d7bf9323265c2f2e22f43e6c80eb3d943",
-                "0xe415482ca06eeb684ad3f758c2129fca4b1eb1f4",
+        TransactionReceipt receipt = allowanceService.requireAllowance("0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6",
+                "0x81431b69b1e0e334d4161a13c2955e0f3599381e",
                 TokenSymbols.DAI,
                 BigDecimal.valueOf(100000));
 
@@ -69,8 +69,8 @@ public class AllowanceServiceTest {
     @Test
     public void testRemoveAllowance() throws Exception {
         AllowanceService allowanceService = mcd.getAllowanceService();
-        TransactionReceipt receipt = allowanceService.removeAllowance("0x9596c16d7bf9323265c2f2e22f43e6c80eb3d943",
-                "0xe415482ca06eeb684ad3f758c2129fca4b1eb1f4",
+        TransactionReceipt receipt = allowanceService.removeAllowance("0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6",
+                "0x81431b69b1e0e334d4161a13c2955e0f3599381e",
                 TokenSymbols.DAI);
 
         assert receipt.isStatusOK();
