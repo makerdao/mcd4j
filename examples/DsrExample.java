@@ -36,11 +36,11 @@ public class DsrExample {
         String httpEndpoint = args[1];
 
         Credentials credentials = Credentials.create(privateKey);
-        Web3j web3jMainnet = Web3j.build(new HttpService(httpEndpoint));
+        Web3j web3j = Web3j.build(new HttpService(httpEndpoint));
 
         // instantiate MCD object - MCD configuration is created based on provided http endpoint type.
         // It currently supports Mainnet and Kovan networks
-        Mcd mcd = new Mcd(web3jMainnet, credentials, new DefaultGasProvider());
+        Mcd mcd = new Mcd(web3j, credentials, new DefaultGasProvider());
 
         // get MCD service of interest for DSR
         SavingsService savingsService = mcd.getSavingsService();
