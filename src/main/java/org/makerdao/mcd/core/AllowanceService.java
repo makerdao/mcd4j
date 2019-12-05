@@ -14,10 +14,13 @@ package org.makerdao.mcd.core;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public interface AllowanceService {
 
-    TransactionReceipt requireAllowance(String owner, String receiver, String tokenSymbol, BigDecimal amountInDai) throws Exception;
+    TransactionReceipt requireAllowance(String owner, String receiver, TokenSymbol tokenSymbol, BigDecimal amountInDai) throws Exception;
 
-    TransactionReceipt removeAllowance(String owner, String receiver, String tokenSymbol) throws Exception;
+    TransactionReceipt removeAllowance(String owner, String receiver, TokenSymbol tokenSymbol) throws Exception;
+
+    BigDecimal getBalanceOf(String address, TokenSymbol tokenSymbol) throws Exception;
 }

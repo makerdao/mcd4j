@@ -35,6 +35,11 @@ public class DSProxyServiceImpl implements DSProxyService {
     }
 
     @Override
+    public DSProxy getProxy(String proxyAddress) throws Exception {
+        return (DSProxy) smartContractService.getContractByAddress(DSProxy.class, proxyAddress);
+    }
+
+    @Override
     public DSProxy getProxy(String ownerAddress, boolean create) throws Exception {
 
         DSProxy cachedProxy = proxyMap.get(ownerAddress);
@@ -63,13 +68,13 @@ public class DSProxyServiceImpl implements DSProxyService {
         return dsProxy;
     }
 
+    @Override
     public TransactionReceipt execute(DSProxy dsProxy, String address, Function function) throws Exception {
         return dsProxy.executeEncodedTransaction(dsProxy.getContractAddress(),
                 ExecuteFunctionEncoder.encodeFunction(address, function),
                 BigInteger.ZERO,
                 function.getName(),
                 false);
-
     }
 
     @Override

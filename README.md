@@ -41,7 +41,7 @@ DSProxy dsProxy = dsProxyService.getProxy(registeredEthAccount, true);
 // 2 - set proxy allowance of 10 DAI
 allowanceService.requireAllowance(registeredEthAccount,
                     dsProxy.getContractAddress(),
-                    TokenSymbols.DAI,
+                    TokenSymbol.DAI,
                     BigDecimal.TEN);
 
 // 3 - join 3 DAI
@@ -61,7 +61,7 @@ TransactionReceipt receiptExitAllDai = savingsService.exitAll(dsProxy);
 // 6 - remove proxy actions allowance
 allowanceService.removeAllowance(registeredEthAccount,
                      dsProxy.getContractAddress(),
-                     TokenSymbols.DAI);
+                     TokenSymbol.DAI);
 ```
 
 See examples/DsrExample.java for an example
@@ -70,6 +70,7 @@ See examples/DsrExample.java for an example
 
 Prerequisites:
 * dai.js testchain started (see https://github.com/makerdao/dai.js#running-the-testchain)
-* testchain account `0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6` funded with 50 DAI or more (see https://github.com/makerdao/dai.js/blob/dev/packages/dai-plugin-mcd/test/SavingsService.spec.js#L41 for how to open a Vault and generate DAI)
+* testchain account `0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6` funded with 60 DAI or more
+  (in dai.js run `node_modules/.bin/babel-node scripts/generateDai.js 0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6 60`)
 
 For running tests on testchain:  `mvn test`

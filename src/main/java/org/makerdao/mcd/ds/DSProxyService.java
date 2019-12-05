@@ -17,6 +17,8 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 public interface DSProxyService {
 
+    DSProxy getProxy(String proxyAddress) throws Exception;
+
     DSProxy getProxy(String ownerAddress, boolean create) throws Exception;
 
     TransactionReceipt execute(DSProxy dsProxy, String address, Function function) throws Exception;

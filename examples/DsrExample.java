@@ -12,7 +12,7 @@
 import org.makerdao.mcd.Mcd;
 import org.makerdao.mcd.contracts.DSProxy;
 import org.makerdao.mcd.core.AllowanceService;
-import org.makerdao.mcd.core.TokenSymbols;
+import org.makerdao.mcd.core.TokenSymbol;
 import org.makerdao.mcd.ds.DSProxyService;
 import org.makerdao.mcd.dsr.SavingsService;
 import org.web3j.crypto.Credentials;
@@ -55,7 +55,7 @@ public class DsrExample {
         // and print transaction hash
         TransactionReceipt addDaiAllowance = allowanceService.requireAllowance(credentials.getAddress(),
                 dsProxy.getContractAddress(),
-                TokenSymbols.DAI,
+                TokenSymbol.DAI,
                 BigDecimal.TEN);
         System.out.println(addDaiAllowance.getTransactionHash());
 
@@ -78,7 +78,7 @@ public class DsrExample {
         // remove ds proxy allowance on registered ETH account and print transaction hash
         TransactionReceipt removeDaiAllowance = allowanceService.removeAllowance(credentials.getAddress(),
                 dsProxy.getContractAddress(),
-                TokenSymbols.DAI);
+                TokenSymbol.DAI);
         System.out.println(removeDaiAllowance.getTransactionHash());
 
     }

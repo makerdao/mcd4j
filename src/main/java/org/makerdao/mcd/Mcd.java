@@ -56,8 +56,8 @@ public class Mcd {
         savingsService = new SavingsServiceImpl(pot, dsProxyService, dssProxyActionsDsr, vat, daiJoin);
 
         Map<String, ERC20Token> tokens = new HashMap<>();
-        tokens.put(TokenSymbols.DAI, daiErc20Token);
-        tokens.put(TokenSymbols.BAT, batErc20Token);
+        tokens.put(TokenSymbol.DAI.getSymbol(), daiErc20Token);
+        tokens.put(TokenSymbol.BAT.getSymbol(), batErc20Token);
         allowanceService = new AllowanceServiceImpl(tokens);
     }
 

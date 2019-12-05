@@ -17,6 +17,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.Map;
 
 import static org.makerdao.mcd.McdConstants.*;
@@ -30,8 +31,8 @@ public class AllowanceServiceImpl implements AllowanceService {
     }
 
     @Override
-    public TransactionReceipt requireAllowance(String owner, String receiver, String tokenSymbol, BigDecimal amountInDai) throws Exception {
-        ERC20Token token = tokens.get(tokenSymbol);
+    public TransactionReceipt requireAllowance(String owner, String receiver, TokenSymbol tokenSymbol, BigDecimal amountInDai) throws Exception {
+        ERC20Token token = tokens.get(tokenSymbol.getSymbol());
         if (token == null) {
             throw new TokenException("No token registered with symbol " + tokenSymbol);
         }
@@ -40,12 +41,22 @@ public class AllowanceServiceImpl implements AllowanceService {
     }
 
     @Override
-    public TransactionReceipt removeAllowance(String owner, String receiver, String tokenSymbol) throws Exception {
-        ERC20Token token = tokens.get(tokenSymbol);
+    public TransactionReceipt removeAllowance(String owner, String receiver, TokenSymbol tokenSymbol) throws Exception {
+        ERC20Token token = tokens.get(tokenSymbol.getSymbol());
         if (token == null) {
             throw new TokenException("No token registered with symbol " + tokenSymbol);
         }
 
         return token.approve(receiver, BigInteger.ZERO).send();
+    }
+
+    @Override
+    public BigDecimal getBalanceOf(String address, TokenSymbol tokenSymbol) throws Exception {
+        ERC20Token token = tokens.get(tokenSymbol.getSymbol());
+        if (token == null) {
+            throw new TokenException("No token registered with symbol " + tokenSymbol);
+        }
+
+        return new BigDecimal(token.balanceOf(address).send()).divide(WAD, MathContext.DECIMAL128);
     }
 }

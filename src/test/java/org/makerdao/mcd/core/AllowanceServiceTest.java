@@ -37,7 +37,7 @@ public class AllowanceServiceTest {
     @Before
     public void beforeTest() throws Exception {
         daiToken = mock(ERC20Token.class);
-        tokens.put(TokenSymbols.DAI, daiToken);
+        tokens.put(TokenSymbol.DAI.getSymbol(), daiToken);
         mcd = new Mcd(Web3j.build(new HttpService("http://localhost:2000")),
                 Credentials.create("474beb999fed1b3af2ea048f963833c686a0fba05f5724cb6417cf3b8ee9697e"),
                 new DefaultGasProvider());
@@ -46,7 +46,7 @@ public class AllowanceServiceTest {
     @Test(expected = TokenException.class)
     public void testUnknownTokenRequireAllowance() throws Exception {
         AllowanceService service = new AllowanceServiceImpl(tokens);
-        service.requireAllowance("", "", "MKR", BigDecimal.TEN);
+        service.requireAllowance("", "", TokenSymbol.BAT, BigDecimal.TEN);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class AllowanceServiceTest {
         AllowanceService allowanceService = mcd.getAllowanceService();
         TransactionReceipt receipt = allowanceService.requireAllowance("0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6",
                 "0x81431b69b1e0e334d4161a13c2955e0f3599381e",
-                TokenSymbols.DAI,
+                TokenSymbol.DAI,
                 BigDecimal.valueOf(100000));
 
         assert receipt.isStatusOK();
@@ -63,7 +63,7 @@ public class AllowanceServiceTest {
     @Test(expected = TokenException.class)
     public void testUnknownTokenRemoveAllowance() throws Exception {
         AllowanceService service = new AllowanceServiceImpl(tokens);
-        service.removeAllowance("", "", "MKR");
+        service.removeAllowance("", "", TokenSymbol.BAT);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class AllowanceServiceTest {
         AllowanceService allowanceService = mcd.getAllowanceService();
         TransactionReceipt receipt = allowanceService.removeAllowance("0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6",
                 "0x81431b69b1e0e334d4161a13c2955e0f3599381e",
-                TokenSymbols.DAI);
+                TokenSymbol.DAI);
 
         assert receipt.isStatusOK();
     }
