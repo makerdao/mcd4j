@@ -71,6 +71,6 @@ See examples/DsrExample.java for an example
 Prerequisites:
 * dai.js testchain started (see https://github.com/makerdao/dai.js#running-the-testchain)
 * testchain account `0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6` funded with 60 DAI or more
-  (in dai.js run `node_modules/.bin/babel-node scripts/generateDai.js 0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6 60`)
+  (in dai.js run `node_modules/.bin/babel-node packages/test-helpers/scripts/generateDai.js 0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6 60`)
 
 For running tests on testchain:  `mvn test`
